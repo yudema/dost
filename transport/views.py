@@ -10,6 +10,7 @@ from decimal import Decimal
 import json
 from django.urls import reverse
 from django.utils import timezone
+from .telegram_bot import telegram_notifier
 
 def index(request):
     if not request.session.session_key:
@@ -129,6 +130,8 @@ def create_ticket(request):
             message=message,
             is_staff=False
         )
+        
+        telegram_notifier.send_ticket_notification(ticket)
         
         request.session['current_ticket_id'] = ticket.id
         
