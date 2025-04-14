@@ -1,0 +1,316 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Транспортная система{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #c8e6c9;
+        }
+        
+        .content {
+            flex: 1 0 auto;
+        }
+        
+        footer {
+            flex-shrink: 0;
+            background-color: #1b5e20;
+            color: white;
+            border-top: 1px solid #2e7d32;
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #e8f5e9;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            border-left: 4px solid #1b5e20;
+            background-color: #c8e6c9;
+        }
+        
+        .btn {
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+            color: white;
+            padding: 2.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>') repeat;
+            opacity: 0.1;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header .btn {
+            background-color: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.3);
+            color: white;
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .header .btn:hover {
+            background-color: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.4);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .header .btn-primary {
+            background-color: white;
+            border-color: white;
+            color: #1b5e20;
+        }
+        
+        .header .btn-primary:hover {
+            background-color: rgba(255,255,255,0.9);
+            border-color: rgba(255,255,255,0.9);
+            color: #1b5e20;
+        }
+        
+        .transport-card {
+            height: 100%;
+        }
+        
+        .transport-card .card-body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .transport-card .btn {
+            margin-top: auto;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: #1b5e20;
+            color: white;
+        }
+        
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: #c8e6c9;
+            border-radius: 0.5rem;
+            border: 1px solid #a5d6a7;
+        }
+        
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            max-width: 80%;
+        }
+        
+        .chat-message.staff {
+            background-color: #a5d6a7;
+            margin-left: auto;
+        }
+        
+        .chat-message:not(.staff) {
+            background-color: #c8e6c9;
+        }
+        
+        .message-form {
+            margin-top: 1rem;
+        }
+        
+        .ticket-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #a5d6a7;
+            border-radius: 0.5rem;
+            background-color: #c8e6c9;
+        }
+        
+        .ticket-item {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #a5d6a7;
+        }
+        
+        .ticket-item:last-child {
+            border-bottom: none;
+        }
+        
+        .ticket-item:hover {
+            background-color: #a5d6a7;
+        }
+        
+        .ticket-item.active {
+            background-color: #81c784;
+        }
+        
+        .btn-primary {
+            background-color: #1b5e20;
+            border-color: #1b5e20;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2e7d32;
+            border-color: #2e7d32;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #1b5e20 !important;
+        }
+        
+        .container {
+            position: relative;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1b5e20, #2e7d32, #1b5e20);
+            background-size: 200% 100%;
+            animation: gradient 3s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem 0;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .chat-messages {
+                height: 300px;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="content">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <i class="bi bi-truck"></i> Транспортная система
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'index' %}">
+                                <i class="bi bi-house"></i> Главная
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'support_chat' %}">
+                                <i class="bi bi-headset"></i> Поддержка
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container py-4">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2024 Транспортная система. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

@@ -1,0 +1,52 @@
+{% extends 'transport/base.html' %}
+
+{% block title %}Главная - Транспортная система{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <h1 class="display-4 mb-3">Транспортная система</h1>
+                <p class="lead">Отслеживание и управление транспортом в реальном времени</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for transport in transports %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-truck"></i> {{ transport.name }}
+                </h5>
+                <span class="status-badge">
+                    {{ transport.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    <i class="bi bi-geo-alt"></i> Текущее местоположение: {{ transport.current_location }}
+                </p>
+                <p class="card-text">
+                    <i class="bi bi-clock"></i> Последнее обновление: {{ transport.updated_at|date:"d.m.Y H:i" }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{% url 'transport_detail' transport.id %}" class="btn btn-primary w-100">
+                    <i class="bi bi-info-circle"></i> Подробнее
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Транспортные средства не найдены
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

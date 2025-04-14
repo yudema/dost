@@ -1,0 +1,88 @@
+{% extends 'transport/base.html' %}
+
+{% block title %}{{ transport.number }} - Детали транспорта{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h2>{{ transport.number }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Основная информация</h4>
+                    <table class="table">
+                        <tr>
+                            <th>Тип транспорта:</th>
+                            <td>{{ transport.type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Грузоподъемность:</th>
+                            <td>{{ transport.capacity }} тонн</td>
+                        </tr>
+                        <tr>
+                            <th>Текущий статус:</th>
+                            <td><span class="badge bg-primary">{{ transport.get_status_display }}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Текущее местоположение:</th>
+                            <td>{{ transport.current_location }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h4>Текущие грузы</h4>
+                    {% if cargoes %}
+                        <div class="list-group">
+                        {% for cargo in cargoes %}
+                            <div class="list-group-item">
+                                <h6 class="mb-1">{{ cargo.description }}</h6>
+                                <p class="mb-1">Вес: {{ cargo.weight }} т | Объем: {{ cargo.volume }} м³</p>
+                                <small>От: {{ cargo.sender }} | Кому: {{ cargo.receiver }}</small>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>Нет активных грузов</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h4>История статусов</h4>
+        </div>
+        <div class="card-body">
+            {% if status_history %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                                <th>Местоположение</th>
+                                <th>Комментарий</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for status in status_history %}
+                            <tr>
+                                <td>{{ status.timestamp|date:"d.m.Y H:i" }}</td>
+                                <td><span class="badge bg-primary">{{ status.get_status_display }}</span></td>
+                                <td>{{ status.location }}</td>
+                                <td>{{ status.comment }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>История статусов отсутствует</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 
