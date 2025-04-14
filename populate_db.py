@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import sys
 
 try:
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'otslej.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'transport.settings')
     print('Инициализация Django...')
     django.setup()
     print('Django успешно инициализирован')
