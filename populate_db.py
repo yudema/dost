@@ -96,4 +96,3 @@ except Exception as e:
     print(f'Произошла ошибка при инициализации: {str(e)}')
     print(f'Тип ошибки: {type(e).__name__}')
     sys.exit(1) 
-    
